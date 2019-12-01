@@ -1,6 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netcoreapp2.2</TargetFramework>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Version>0.5.0</Version>
+		<Company>FVDL Consulting</Company>
+		<Authors>FrankVDL</Authors>
+		<Description>An .Net API for the Loxone Miniserver</Description>
+		<RepositoryUrl>https://github.com/FrankVDL2471/Loxone.Net</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="Models\**" />
