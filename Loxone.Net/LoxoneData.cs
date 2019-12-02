@@ -16,11 +16,7 @@ namespace Loxone.Net
 		internal LoxoneData(LoxoneClient client)
 		{
 			_client = client;
-
 			this.LastModified = default(DateTime);
-			this.Rooms = new List<Room>();
-			this.Categories = new List<Category>();
-			this.Controls = new List<Control>();
 		}
 
 		public DateTime LastModified { get; set; }
@@ -29,6 +25,7 @@ namespace Loxone.Net
 		public List<Category> Categories { get; private set; }
 		public List<Control> Controls { get; private set; }
 
+		public Dictionary<int, string> OperatingModes { get; private set; }
 
 		internal void Update(LoxApp3Data file) {
 			this.LastModified = file.LastModified;
@@ -37,13 +34,25 @@ namespace Loxone.Net
 			this.Rooms = file.Rooms.Values.Select(r => new Room { Data = r }).ToList();
 			this.Categories = file.Categories.Values.Select(c => new Category { Data = c }).ToList();
 
+
+			this.OperatingModes = new Dictionary<int, string>();
+			foreach (string key in file.OperatingModes.Keys) {
+				int id;
+				if (!int.TryParse(key, out id)) continue;
+				this.OperatingModes.Add(id, file.OperatingModes[key]);
+			}
+
 			this.Controls = new List<Control>();
 			foreach(LoxoneControl data in file.Controls.Values) {
-
-
 				Control ctrl = this.Controls.FirstOrDefault(c => c.Uid.Equals(data.UuidAction));
 				if (ctrl == null) {
 					switch (data.Type) {
+						case "Alarm":
+							ctrl = new Data.Controls.Alarm(_client);
+							break;
+						case "AlarmClock":
+							ctrl = new Data.Controls.AlarmClock(_client);
+							break;
 						case "Pushbutton":
 							ctrl = new Data.Controls.PushButton(_client);
 							break;

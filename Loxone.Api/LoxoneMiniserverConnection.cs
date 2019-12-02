@@ -55,9 +55,8 @@ namespace Loxone.Api {
 
 		public event EventHandler<OnEventTableMessageEventArgs> OnMessage;
 		public event EventHandler<System.EventArgs> OnConnectionEstablished;
-
-
 		public event EventHandler<System.EventArgs> OnConnectionClosed;
+		public event EventHandler<System.EventArgs> OnAppDataLoaded;
 
 		public LoxoneMiniserverConnection(string address, int port, string username, string password) {
 			_keepAliveTimer = new Timer(TimeSpan.FromMinutes(4).TotalMilliseconds);
@@ -84,9 +83,9 @@ namespace Loxone.Api {
 
 		public LoxApp3Data LoxData => _loxData;
 
-		public Task<LoxApp3Data> LoadLoxAppData() {
-			return webApi.GetBasicAuthRequest<LoxApp3Data>("/data/LoxAPP3.json");
-		}
+		//public Task<LoxApp3Data> LoadLoxAppData() {
+		//	return webApi.GetBasicAuthRequest<LoxApp3Data>("/data/LoxAPP3.json");
+		//}
 
 		public Task<LoxoneApiResponse<WriteValueResponse>> WriteValue(string uuid, object value) {
 			var uriParam = "";
@@ -120,6 +119,9 @@ namespace Loxone.Api {
 
 				try {
 					_loxData = await webApi.GetBasicAuthRequest<LoxApp3Data>("/data/LoxAPP3.json");
+					if (this.OnAppDataLoaded != null) {
+						this.OnAppDataLoaded(this, new EventArgs());
+					}
 				} catch {
 					return false;
 				}

@@ -8,14 +8,14 @@ namespace LoxoneTest {
 	class Program {
 		static async Task Main(string[] args) {
 
-			
+
 
 			Console.Write("Loxone Miniserver IpAddress or serialnr : ");
 			string serialnr = Console.ReadLine();
 			Console.Write("Username : ");
 			string userName = Console.ReadLine();
 			Console.Write("Password : ");
-			string passWord= Console.ReadLine();
+			string passWord = Console.ReadLine();
 
 
 			string serverIp = null;
@@ -42,6 +42,8 @@ namespace LoxoneTest {
 							foreach (Control ctrl in client.Data.Controls) {
 								Console.WriteLine($" - {ctrl.GetType().Name} : {ctrl.Name} ");
 							}
+						} else if (cmds[0].Equals("getstates")) {
+							client.RefreshStates();
 						} else {
 							foreach (Control ctrl in client.GetAllControlsOfType(cmds[0])) {
 								Console.WriteLine($" - {ctrl.Name} ");
@@ -61,7 +63,7 @@ namespace LoxoneTest {
 								Console.WriteLine($"  Room : {ctrl.Room}");
 								Console.WriteLine($"  Uid  : {ctrl.Uid}");
 								Console.WriteLine($"  States");
-								foreach((string key, object val) state in ctrl.GetStates()) {
+								foreach ((string key, object val) state in ctrl.GetStates()) {
 									Console.WriteLine($"    {state.key} = {state.val}");
 								}
 							}

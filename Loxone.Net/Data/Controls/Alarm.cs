@@ -4,15 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Loxone.Net.Data.Controls
-{
+namespace Loxone.Net.Data.Controls {
 
 
-	public class Alarm : Control
-	{
+	public class Alarm : Control {
 
-		public enum AlarmLevel : int
-		{
+		public enum AlarmLevel : int {
 			None = 0,
 			Silent = 1,
 			Acustic = 2,
@@ -23,12 +20,12 @@ namespace Loxone.Net.Data.Controls
 		}
 
 
-		internal protected Alarm(LoxoneClient client) : base(client)	{
+		internal protected Alarm(LoxoneClient client) : base(client) {
 		}
 
 		private bool _isArmed = false;
 		public bool IsArmed {
-			get { return _isArmed;  }
+			get { return _isArmed; }
 			internal set {
 				this.SetProperty<bool>(ref _isArmed, value, nameof(IsArmed));
 			}
@@ -50,8 +47,7 @@ namespace Loxone.Net.Data.Controls
 		/// <param name="withMovement">Enabled motion detection</param>
 		/// <param name="delayed">Arms the alarm control with the given delay ('Da' parameter)</param>
 		/// <returns></returns>
-		public Task<bool> TurnOn(bool withMovement = true, bool delayed = true)
-		{
+		public Task<bool> TurnOn(bool withMovement = true, bool delayed = true) {
 			string cmd = (delayed ? "delayedon" : "on") + (withMovement ? "/0" : "/1");
 			return base.SendCmd(cmd);
 		}
@@ -61,8 +57,7 @@ namespace Loxone.Net.Data.Controls
 		/// Disarms the AlarmControl
 		/// </summary>
 		/// <returns></returns>
-		public Task<bool> TurnOn()
-		{
+		public Task<bool> TurnOff() {
 			return this.SendCmd("off");
 		}
 

@@ -67,30 +67,33 @@ namespace Loxone.Net {
 			_passWord = passWord;
 
 
-			_connection = new LoxoneMiniserverConnection(_serverIp, _port, _userName, _passWord);
-			if (!await _connection.Connect()) return false;
-
-
-
 			_data = new LoxoneData(this);
-			_data.Update(_connection.LoxData);
+			_connection = new LoxoneMiniserverConnection(_serverIp, _port, _userName, _passWord);
+
+			_connection.OnAppDataLoaded += _connection_OnAppDataLoaded;
 			_connection.OnMessage += _connection_OnMessage;
-			_connection.EnableStatusUpdates();
 
-
+			if (!await _connection.Connect()) return false;
 			return true;
-
 		}
 
 
 		public bool Close() {
 			if (_connection == null) return false;
+			_connection.OnAppDataLoaded -= _connection_OnAppDataLoaded;
 			_connection.OnMessage -= _connection_OnMessage;
 			_connection.Close();
 			_connection = null;
 			return true;
 		}
 
+		public bool RefreshStates() {
+			if (_connection == null) return false;
+			return _connection.EnableStatusUpdates();
+		}
+		private void _connection_OnAppDataLoaded(object sender, EventArgs e) {
+			_data.Update(_connection.LoxData);
+		}
 
 		private void _connection_OnMessage(object sender, Driver.EventArgs.OnEventTableMessageEventArgs e) {
 
