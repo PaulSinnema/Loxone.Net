@@ -56,7 +56,14 @@ namespace LoxoneTest {
 								Console.WriteLine(" - Not found");
 							} else {
 								await ctrl.Query();
-								Console.WriteLine(JsonConvert.SerializeObject(ctrl));
+
+								Console.WriteLine($"  Name : {ctrl.Name}");
+								Console.WriteLine($"  Room : {ctrl.Room}");
+								Console.WriteLine($"  Uid  : {ctrl.Uid}");
+								Console.WriteLine($"  States");
+								foreach((string key, object val) state in ctrl.GetStates()) {
+									Console.WriteLine($"    {state.key} = {state.val}");
+								}
 							}
 						}
 					} else if (cmds.Length == 3) {

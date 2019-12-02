@@ -104,6 +104,10 @@ namespace Loxone.Api {
 			return webApi.GetRequest<WriteValueResponse>($"/jdev/sps/io/{uuid}");
 		}
 
+		public bool EnableStatusUpdates() {
+			return _webSocket.Send(EncryptMessageForMs($"salt/{GenerateSalt()}/jdev/sps/enablebinstatusupdate", false));			
+		}
+
 
 
 		public async Task<bool> Connect() {
@@ -317,19 +321,24 @@ namespace Loxone.Api {
 		}
 
 		private string DecryptMessage(string message) {
-			var byteArray = Convert.FromBase64String(message);
-			using (var aes = Aes.Create()) {
-				aes.Padding = PaddingMode.None;
-				aes.Mode = CipherMode.CBC;
-				using (ICryptoTransform encryptor = aes.CreateDecryptor(_aesKey, _aesIv)) {
-					using (var memoryStream = new MemoryStream()) {
-						using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write)) {
-							cryptoStream.Write(byteArray);
-						}
+			try {
+				var byteArray = Convert.FromBase64String(message);
+				using (var aes = Aes.Create()) {
+					aes.Padding = PaddingMode.None;
+					aes.Mode = CipherMode.CBC;
+					using (ICryptoTransform encryptor = aes.CreateDecryptor(_aesKey, _aesIv)) {
+						using (var memoryStream = new MemoryStream()) {
+							using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write)) {
+								cryptoStream.Write(byteArray);
+							}
 
-						return Encoding.UTF8.GetString(memoryStream.ToArray());
+							return Encoding.UTF8.GetString(memoryStream.ToArray());
+						}
 					}
 				}
+			} catch (System.FormatException formatErr) {
+				return message;
+
 			}
 		}
 

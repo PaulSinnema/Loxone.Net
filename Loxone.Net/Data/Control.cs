@@ -1,12 +1,14 @@
 ﻿using Loxone.Api.Data.LoxApp;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Loxone.Net.Data {
 	public class Control : BindableObject {
 
 		protected readonly LoxoneClient _client;
+		protected readonly Dictionary<string, object> _stateValues = new Dictionary<string, object>();
 		internal protected Control(LoxoneClient client) {
 			_client = client;
 		}
@@ -83,9 +85,21 @@ namespace Loxone.Net.Data {
 		}
 
 		internal void SetState(string uid, double value) {
-			this.OnStateChanged(this.GetStateName(uid), value);
+			string nm = this.GetStateName(uid);
+			if (_stateValues.ContainsKey(nm)) {
+				_stateValues[nm] = value;
+			} else {
+				_stateValues.Add(nm, value);
+			}
+			this.OnStateChanged(nm, value);
 		}
 		internal void SetState(string uid, string value) {
+			string nm = this.GetStateName(uid);
+			if (_stateValues.ContainsKey(nm)) {
+				_stateValues[nm] = value;
+			} else {
+				_stateValues.Add(nm, value);
+			}
 			this.OnStateChanged(this.GetStateName(uid), value);
 		}
 		private string GetStateName(string uid) {
@@ -97,6 +111,15 @@ namespace Loxone.Net.Data {
 
 			if (uid.Equals(this.Uid)) return "control";
 			return string.Empty;
+		}
+		public object GetState(string name) {
+			if (!_stateValues.ContainsKey(name)) return null;
+			return _stateValues[name];
+		}
+		public IEnumerable<(string, object)> GetStates() {
+			foreach(string key in _stateValues.Keys) {
+				yield return (key, _stateValues[key]);
+			}
 		}
 
 		protected virtual void OnStateChanged(string name, double value) {

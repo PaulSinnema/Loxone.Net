@@ -14,9 +14,6 @@ namespace Loxone.Net {
 
 		private string _userName;
 		private string _passWord;
-		private string _credentials;
-
-		private string _publicKey;
 
 
 		private LoxoneMiniserverConnection _connection;
@@ -73,10 +70,13 @@ namespace Loxone.Net {
 			_connection = new LoxoneMiniserverConnection(_serverIp, _port, _userName, _passWord);
 			if (!await _connection.Connect()) return false;
 
+
+
 			_data = new LoxoneData(this);
 			_data.Update(_connection.LoxData);
-
 			_connection.OnMessage += _connection_OnMessage;
+			_connection.EnableStatusUpdates();
+
 
 			return true;
 
