@@ -1,4 +1,5 @@
-﻿using Loxone.Net;
+﻿using CommandLine;
+using Loxone.Net;
 using Loxone.Net.Data;
 using Newtonsoft.Json;
 using System;
@@ -8,26 +9,38 @@ namespace LoxoneTest {
 	class Program {
 		static async Task Main(string[] args) {
 
+			StartupOptions options = null;
+
+			Parser.Default.ParseArguments<StartupOptions>(args)
+					.WithParsed<StartupOptions>(o => options = o)
+					.WithNotParsed<StartupOptions>(e => e.Output());
 
 
-			Console.Write("Loxone Miniserver IpAddress or serialnr : ");
-			string serialnr = Console.ReadLine();
-			Console.Write("Username : ");
-			string userName = Console.ReadLine();
-			Console.Write("Password : ");
-			string passWord = Console.ReadLine();
+			if (options == null) options = new StartupOptions();
+			if (string.IsNullOrEmpty(options.Server)) {
+				Console.Write("Loxone Miniserver IpAddress or serialnr : ");
+				options.Server = Console.ReadLine();
+			}
+			if (string.IsNullOrEmpty(options.User)) {
+				Console.Write("Username : ");
+				options.User = Console.ReadLine();
+			}
+			if (string.IsNullOrEmpty(options.Password)) {
+				Console.Write("Password : ");
+				options.Password = Console.ReadLine();
+			}
 
 
 			string serverIp = null;
-			if (serialnr.Contains(".")) { //quick and dirty hack to check if it is an ip-address
-				serverIp = serialnr;
+			if (options.Server.Contains(".")) { //quick and dirty hack to check if it is an ip-address
+				serverIp = options.Server;
 			} else {
-				serverIp = LoxoneClient.GetIP(serialnr);
+				serverIp = LoxoneClient.GetIP(options.Server);
 			}
 
 
 			using (LoxoneClient client = new LoxoneClient(serverIp)) {
-				bool open = await client.Open(userName, passWord);
+				bool open = await client.Open(options.User, options.Password);
 
 				while (true) {
 					Console.Write("Enter command : ");
