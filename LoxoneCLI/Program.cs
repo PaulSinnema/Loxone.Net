@@ -70,26 +70,14 @@ namespace LoxoneCLI {
 					//if (cmd.Length == 0) continue;
 
 					IEnumerable<string> cmds = Tools.Split(cmd);
-					var result = cmdParser.ParseArguments<HelpCmd, ListCmd, GetCmd>(cmds);
+					var result = cmdParser.ParseArguments<HelpCmd, ListCmd, GetCmd, ExecCmd>(cmds);
 
-					//var helpText = HelpText.AutoBuild(result, h =>
-					//{
-					//	//configure HelpText
-					//	h.AdditionalNewLineAfterOption = false; //remove newline between options
-					//	h.Heading = "Loxone CLI v0.0.1 beta"; //change header
-					//	h.Copyright = "Copyright (c) 2019 FVDL Consulting"; //change copyright text
-					//																								 // more options ...
-					//	return h;
-					//}, e => e);
-
-					//result.WithNotParsed((errs) => {
-					//	Console.WriteLine(helpText);
-					//});
-
+				
 					result.WithNotParsed(errs => PrintErros(errs))
 							.WithParsed<HelpCmd>(c => c.Run())
 							.WithParsed<ListCmd>(c => c.Run(_client))
-							.WithParsed<GetCmd>(c => c.Run(_client).Wait());
+							.WithParsed<GetCmd>(c => c.Run(_client).Wait())
+							.WithParsed<ExecCmd>(c => c.Run(_client).Wait());
 
 					//result.MapResult(
 					//		(ListCmd c) => c.Run(_client),

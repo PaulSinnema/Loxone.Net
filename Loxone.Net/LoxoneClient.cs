@@ -3,6 +3,7 @@ using Loxone.Api.Data.Message;
 using Loxone.Net.Data;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -213,22 +214,22 @@ namespace Loxone.Net {
 
 		internal async Task<string> WriteValue(string uuid, object value) {
 			if (_connection == null) return null;
-			Console.Write($"WriteValue : {uuid}/{value}");
+			Debug.Write($"WriteValue : {uuid}/{value}");
 
 			var response = await _connection.WriteValue(uuid, value);
 
-			Console.WriteLine($" -> {response.Data.Value}");
+			Debug.WriteLine($" -> {response.Data.Value}");
 
 			return response?.Data.Value;
 		}
 
 		internal async Task<string> ReadValue(string uuid) {
 			if (_connection == null) return null;
-			Console.Write($"ReadValue : {uuid}");
+			Debug.Write($"ReadValue : {uuid}");
 
 			var response = await _connection.ReadValue(uuid);
 
-			Console.WriteLine($" -> {response.Data.Value}");
+			Debug.WriteLine($" -> {response.Data.Value}");
 
 			return response?.Data.Value;
 		}

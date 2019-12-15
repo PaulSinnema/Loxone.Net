@@ -29,6 +29,9 @@ namespace LoxoneCLI.Commands {
 			} else if (this.Name.Equals("get", StringComparison.OrdinalIgnoreCase)) {
 				txt.Heading = "Loxone CLI - Options for 'get'";
 				txt = this.GetHelp<GetCmd>(txt);
+			} else if (this.Name.Equals("exec", StringComparison.OrdinalIgnoreCase)) {
+				txt.Heading = "Loxone CLI - Options for 'exec'";
+				txt = this.GetHelp<ExecCmd>(txt);
 			}
 			Console.WriteLine(txt);
 		}
@@ -36,18 +39,7 @@ namespace LoxoneCLI.Commands {
 		private HelpText GetHelp<T>(HelpText txt) where T : class {
 			var result = Parser.Default.ParseArguments<T>(new string[] { });
 			return txt.AddOptions<T>(result);
-		}
-
-		//internal void DisplayHelp<T>(ParserResult<T> result, IEnumerable<Error> errs) {
-		//	var helpText = HelpText.AutoBuild(result, h =>
-		//	{
-		//		h.AdditionalNewLineAfterOption = false;
-		//		h.Heading = "Myapp 2.0.0-beta"; //change header
-		//		h.Copyright = "Copyright (c) 2019 Global.com"; //change copyright text
-		//		return HelpText.RenderUsageText(result, h);
-		//	}, e => e);
-		//	Console.WriteLine(helpText);
-		//}
+		}		
 
 	}
 }
