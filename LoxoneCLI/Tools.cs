@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LoxoneTest {
+namespace LoxoneCLI {
 	public static class Tools {
 
 		public static IEnumerable<string> Split(string commandLine) {

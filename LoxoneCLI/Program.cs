@@ -1,20 +1,30 @@
-﻿using CommandLine;
-using Loxone.Net;
-using Loxone.Net.Data;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LoxoneTest {
+using Loxone.Net;
+using Loxone.Net.Data;
+
+using CommandLine;
+using CommandLine.Text;
+
+using LoxoneCLI.Commands;
+
+
+namespace LoxoneCLI {
 	class Program {
 
 		private static LoxoneClient _client;
 		static async Task Main(string[] args) {
 
 			StartupOptions options = null;
-			Parser.Default.ParseArguments<StartupOptions>(args)
+
+			Parser mainParser = new Parser((s) => {
+				s.AutoHelp = true;
+				s.HelpWriter = Console.Out;
+			});
+			mainParser.ParseArguments<StartupOptions>(args)
 					.WithParsed<StartupOptions>(o => options = o)
 					.WithNotParsed<StartupOptions>(e => e.Output());
 
@@ -42,6 +52,11 @@ namespace LoxoneTest {
 			}
 
 
+			Parser cmdParser = new Parser((s) => {
+				s.AutoHelp = false;
+				s.HelpWriter = null;
+			});
+
 			using (_client = new LoxoneClient(serverIp)) {
 				bool open = await _client.Open(options.User, options.Password);
 
@@ -54,16 +69,39 @@ namespace LoxoneTest {
 					//string[] cmds = cmd.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 					//if (cmd.Length == 0) continue;
 
-					Parser.Default.ParseArguments<ListCmd>(Tools.Split(cmd)).MapResult(
-							(ListCmd c) => RunCmd(c),
-							errs => {
-								foreach(var err in errs) {
-									Console.WriteLine(err);
-								}
-								return 0;
-							}
-						);
-						
+					IEnumerable<string> cmds = Tools.Split(cmd);
+					var result = cmdParser.ParseArguments<HelpCmd, ListCmd, GetCmd>(cmds);
+
+					//var helpText = HelpText.AutoBuild(result, h =>
+					//{
+					//	//configure HelpText
+					//	h.AdditionalNewLineAfterOption = false; //remove newline between options
+					//	h.Heading = "Loxone CLI v0.0.1 beta"; //change header
+					//	h.Copyright = "Copyright (c) 2019 FVDL Consulting"; //change copyright text
+					//																								 // more options ...
+					//	return h;
+					//}, e => e);
+
+					//result.WithNotParsed((errs) => {
+					//	Console.WriteLine(helpText);
+					//});
+
+					result.WithNotParsed(errs => PrintErros(errs))
+							.WithParsed<HelpCmd>(c => c.Run())
+							.WithParsed<ListCmd>(c => c.Run(_client))
+							.WithParsed<GetCmd>(c => c.Run(_client).Wait());
+
+					//result.MapResult(
+					//		(ListCmd c) => c.Run(_client),
+					//		(GetCmd c) => c.Run(_client),
+					//		errs => {
+					//			foreach (var err in errs) {
+					//				Console.WriteLine(err);
+					//			}
+					//			return 0;
+					//		}
+					//	);
+
 
 					//if (cmds.Length == 1) {
 					//	if (cmds[0].Equals("list")) {
@@ -112,24 +150,11 @@ namespace LoxoneTest {
 
 				_client.Close();
 			}
-
-
-
 		}
-		private static int RunCmd(ListCmd cmd) {
-			IEnumerable<Control> ctrls = _client.Data.Controls;
-
-			if (!string.IsNullOrEmpty(cmd.Type)) {
-				ctrls = ctrls.Where(c => c.GetType().Name.Equals(cmd.Type, StringComparison.OrdinalIgnoreCase));
+		private static void PrintErros(IEnumerable<Error> errs) {
+			foreach (var err in errs) {
+				Console.WriteLine(err);
 			}
-			if (!string.IsNullOrEmpty(cmd.Name)) {
-				ctrls = ctrls.Where(c => c.Name.Equals(cmd.Name, StringComparison.OrdinalIgnoreCase));
-			}
-
-			foreach (Control ctrl in ctrls) {
-				Console.WriteLine($" - {ctrl.GetType().Name} : {ctrl.Name} ");
-			}
-			return 1;
 		}
 	}
 }

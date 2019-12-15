@@ -1,13 +1,7 @@
 ﻿using Loxone.Api.Data.LoxApp;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Loxone.Net.Data
-{
+namespace Loxone.Net.Data {
 	public class Room : BindableObject
 	{
 
@@ -28,5 +22,9 @@ namespace Loxone.Net.Data
 		public string Name => _data?.Name;
 
 		public List<Control> Controls { get; private set; }
+
+		public override string ToString() {
+			return this.Name ?? base.ToString();
+		}
 	}
 }

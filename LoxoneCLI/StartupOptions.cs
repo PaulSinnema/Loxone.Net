@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LoxoneTest {
+namespace LoxoneCLI {
 	public class StartupOptions {
 
 		[Option('s', HelpText ="Set MiniServer IP address or SerialNr", Required = false)]

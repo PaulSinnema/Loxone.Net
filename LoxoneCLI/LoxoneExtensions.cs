@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LoxoneTest
+namespace LoxoneCLI
 {
 	public static class LoxoneExtensions
 	{

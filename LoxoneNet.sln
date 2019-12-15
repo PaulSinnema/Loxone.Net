@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loxone.Net", "Loxone.Net\Lo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loxone.Api", "Loxone.Api\Loxone.Api.csproj", "{2214B583-BA03-47C6-8696-85536439EB93}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoxoneTest", "LoxoneTest\LoxoneTest.csproj", "{FBFE8F22-2D31-49D7-B9E8-C4825BB4B055}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoxoneCLI", "LoxoneCLI\LoxoneCLI.csproj", "{EBB955C6-2420-4EEB-84AC-541ADC554D92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,12 +28,12 @@ Global
 		{2214B583-BA03-47C6-8696-85536439EB93}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
 		{2214B583-BA03-47C6-8696-85536439EB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2214B583-BA03-47C6-8696-85536439EB93}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FBFE8F22-2D31-49D7-B9E8-C4825BB4B055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBFE8F22-2D31-49D7-B9E8-C4825BB4B055}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBFE8F22-2D31-49D7-B9E8-C4825BB4B055}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBFE8F22-2D31-49D7-B9E8-C4825BB4B055}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
-		{FBFE8F22-2D31-49D7-B9E8-C4825BB4B055}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBFE8F22-2D31-49D7-B9E8-C4825BB4B055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBB955C6-2420-4EEB-84AC-541ADC554D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBB955C6-2420-4EEB-84AC-541ADC554D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBB955C6-2420-4EEB-84AC-541ADC554D92}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBB955C6-2420-4EEB-84AC-541ADC554D92}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{EBB955C6-2420-4EEB-84AC-541ADC554D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBB955C6-2420-4EEB-84AC-541ADC554D92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
