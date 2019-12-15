@@ -53,6 +53,7 @@ namespace Loxone.Net.Data {
 
 			string msg = await _client.WriteValue(this.Uid, cmd);
 			if (string.IsNullOrEmpty(msg)) return false;
+			if (msg != "1") return false;
 
 			return true;
 		}
