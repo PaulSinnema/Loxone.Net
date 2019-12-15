@@ -28,7 +28,12 @@ namespace Loxone.Net.Data.Controls {
 		internal protected AlarmClock(LoxoneClient client) : base(client) {
 		}
 
+		#region States
+
 		private bool _isEnabled = false;
+		/// <summary>
+		/// If the AlarmClock is enabled
+		/// </summary>
 		public bool IsEnabled {
 			get { return _isEnabled; }
 			internal set {
@@ -38,6 +43,10 @@ namespace Loxone.Net.Data.Controls {
 
 
 		private bool _isAlarmActive = false;
+
+		/// <summary>
+		/// If an entry is ringing
+		/// </summary>
 		public bool IsAlarmActive {
 			get { return _isAlarmActive; }
 			internal set {
@@ -47,6 +56,10 @@ namespace Loxone.Net.Data.Controls {
 
 
 		private bool _confirmationNeeded = false;
+
+		/// <summary>
+		/// If the user needs to confirm the entry
+		/// </summary>
 		public bool ConfirmationNeeded {
 			get { return _confirmationNeeded; }
 			internal set {
@@ -77,7 +90,10 @@ namespace Loxone.Net.Data.Controls {
 				return _entryList.FirstOrDefault(e => e.Id == _nextEntry);
 			}
 		}
+		#endregion
 
+
+		#region Commands
 		/// <summary>
 		/// Activates the Alarm clock
 		/// </summary>
@@ -109,6 +125,27 @@ namespace Loxone.Net.Data.Controls {
 		public Task<bool> Dismiss() {
 			return base.SendCmd("dismiss");
 		}
+
+		public Task<bool> UpdateEntry(AlarmClockEntry entry) {
+			string modes = string.Empty;
+			foreach(string mod in entry.Modes) {
+				var value = _client.Data.OperatingModes.FirstOrDefault((kv) => kv.Value.Equals(mod, StringComparison.OrdinalIgnoreCase));
+				if (modes.Length > 0) modes += ",";
+				modes += value.Key.ToString();
+			}
+
+			return base.SendCmd($"entryList/put/{entry.Id}/{entry.Name}/{entry.Time.TotalSeconds}/{entry.IsActive}/{modes}");
+		}
+
+		public async Task<bool> RemoveEntry(AlarmClockEntry entry) {
+			if ( await base.SendCmd($"entryList/delete/{entry.Id}")) {
+				return true;
+			}
+			return false;
+		}
+
+		#endregion
+
 
 		protected override void OnStateChanged(string name, double value) {
 			base.OnStateChanged(name, value);
