@@ -131,10 +131,10 @@ namespace Loxone.Net.Data.Controls {
 			base.OnStateChanged(name, value);
 
 			if (name.Equals(nameof(EntryList), StringComparison.OrdinalIgnoreCase)) {
-				AlarmClockEntryList items = JsonConvert.DeserializeObject<AlarmClockEntryList>(value);
-				for (int i = 0; i <= 4; i++) {
-					AlarmClockEntryListItem item = items[i];
+				Dictionary<int, AlarmClockEntryListItem> items = JsonConvert.DeserializeObject<Dictionary<int, AlarmClockEntryListItem>>(value);
 
+				foreach(int i in items.Keys) { 
+					AlarmClockEntryListItem item = items[i];
 					AlarmClockEntry entry = this.EntryList.FirstOrDefault(e => e.Id == i);
 					if (entry == null) {
 						if (item != null) {
@@ -163,42 +163,7 @@ namespace Loxone.Net.Data.Controls {
 		}
 	}
 
-
-
-
-	internal class AlarmClockEntryList {
-
-		[JsonProperty("0")]
-		public AlarmClockEntryListItem Entry0 { get; set; }
-
-		[JsonProperty("1")]
-		public AlarmClockEntryListItem Entry1 { get; set; }
-
-		[JsonProperty("2")]
-		public AlarmClockEntryListItem Entry2 { get; set; }
-
-		[JsonProperty("3")]
-		public AlarmClockEntryListItem Entry3 { get; set; }
-
-		[JsonProperty("4")]
-		public AlarmClockEntryListItem Entry4 { get; set; }
-
-
-		public AlarmClockEntryListItem this[int idx] {
-			get {
-				if (idx == 0) return this.Entry0;
-				if (idx == 1) return this.Entry1;
-				if (idx == 2) return this.Entry2;
-				if (idx == 3) return this.Entry3;
-				if (idx == 4) return this.Entry4;
-				return null;
-			}
-		}
-
-
-
-	}
-
+	
 	internal class AlarmClockEntryListItem {
 		public string name { get; set; }
 		public bool isActive { get; set; }
