@@ -1,36 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>netcoreapp2.2</TargetFramework>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Version>0.5.0</Version>
-		<Company>FVDL Consulting</Company>
-		<Authors>FrankVDL</Authors>
-		<Description>An .Net API for the Loxone Miniserver</Description>
-		<RepositoryUrl>https://github.com/FrankVDL2471/Loxone.Net</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="Models\**" />
-	  <EmbeddedResource Remove="Models\**" />
-	  <None Remove="Models\**" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Compile Remove="LoxoneHeader.cs" />
-	  <Compile Remove="LoxoneMessage.cs" />
-	  <Compile Remove="LoxoneStructure.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json">
-			<Version>12.0.2</Version>
-		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Properties\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Loxone.Api\Loxone.Api.csproj" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>0.5.0</Version>
+    <Company>FVDL Consulting</Company>
+    <Authors>FrankVDL</Authors>
+    <Description>An .Net API for the Loxone Miniserver</Description>
+    <RepositoryUrl>https://github.com/FrankVDL2471/Loxone.Net</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="LoxoneHeader.cs" />
+    <Compile Remove="LoxoneMessage.cs" />
+    <Compile Remove="LoxoneStructure.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Loxone.Api\Loxone.Api.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
 </Project>
